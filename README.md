@@ -1,6 +1,6 @@
 # CubixAi MVP
 
-Cubix.AI is a production-style MVP for "SEO + analytics for AI-assisted shopping".
+CubixAi is a production-style MVP for "SEO + analytics for AI-assisted shopping".
 
 It helps brands understand:
 
