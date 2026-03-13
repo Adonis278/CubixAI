@@ -272,7 +272,9 @@ function normalizePromptPayload(payload: z.infer<typeof looseOpenAIPromptResultS
     payload.reasoningNote?.trim() ||
     "No grounded assistant-style answer could be verified for this query.";
   const observedDescription =
-    payload.observedDescription?.trim() || assistantSummary || "No grounded description captured.";
+    payload.observedDescription?.trim() ||
+    assistantSummary ||
+    "No grounded description captured.";
   const reasoningNote =
     payload.reasoningNote?.trim() ||
     payload.assistantSummary?.trim() ||
@@ -1125,9 +1127,9 @@ function buildBriefCoverage(
       status:
         output.sourceInfluence.secureHttpsRate > 0 && output.sourceInfluence.officialSourceShare >= 20
           ? "answered"
-        : output.sourceInfluence.secureHttpsRate > 0
-          ? "partial"
-          : "missing",
+          : output.sourceInfluence.secureHttpsRate > 0
+            ? "partial"
+            : "missing",
       note:
         output.sourceInfluence.secureHttpsRate > 0
           ? `${output.sourceInfluence.officialSourceShare}% of retained sources were official and ${output.sourceInfluence.competitorSourceShare}% were competitor-controlled.`
@@ -1165,7 +1167,7 @@ function buildBriefCoverage(
         output.shareOfShelf > 0 || output.accuracyMetrics.evidenceCoverageRate > 0
           ? "answered"
           : "partial",
-      note: `The dashboard reports share of shelf, visibility score, evidence coverage, and ethics status for each run.`,
+      note: "The dashboard reports share of shelf, visibility score, evidence coverage, and ethics status for each run.",
     },
   ];
 
@@ -1180,10 +1182,7 @@ function buildBriefCoverage(
   };
 }
 
-function buildRecommendations(
-  input: NewAnalysisInput,
-  output: AnalysisOutput,
-): string[] {
+function buildRecommendations(input: NewAnalysisInput, output: AnalysisOutput): string[] {
   const recs = new Set<string>();
 
   if (output.shareOfShelf < 45) {
@@ -1312,7 +1311,7 @@ export async function runOpenAIAnalysis(input: NewAnalysisInput): Promise<Analys
       )
     : null;
 
-  const shareOfShelf = Math.round((mentions.length / results.length) * 100);
+  const shareOfShelf = results.length ? Math.round((mentions.length / results.length) * 100) : 0;
   const sourcesReviewed = dedupeCitations(
     results.flatMap((result) => result.citations.map((citation) => ({ url: citation.url, title: citation.title }))),
     targetHostname,
@@ -1325,8 +1324,56 @@ export async function runOpenAIAnalysis(input: NewAnalysisInput): Promise<Analys
 
   const sourceInfluence = buildSourceInfluenceMetrics(sourcesReviewed);
   const accuracyMetrics = buildAccuracyMetrics(results, accuracyFindings);
-  const ethicsSummary = buildEthicsSummary(accuracyMetrics, sourceInfluence);
   const assistantCoverage = buildAssistantCoverage(results, accuracyFindings);
+
+  const preliminaryOutput = {
+    analysisProvider: "openai" as const,
+    monitoringMode: "assistant-search-monitor" as const,
+    assistantsMonitored: ASSISTANTS,
+    queriesAnalyzed: results.length,
+    executiveSummary: "",
+    shareOfShelf,
+    averageRank,
+    visibilityScore: 0,
+    sourceInfluence,
+    accuracyMetrics,
+    ethicsSummary: {
+      status: "review" as const,
+      hallucinationRisk: "medium" as const,
+      flaggedClaimCount: accuracyMetrics.flaggedClaims,
+      note: "",
+    },
+    briefCoverage: { score: 0, items: [] },
+    assistantCoverage,
+    siteAudit,
+    results,
+    recommendations: [],
+    sourcesReviewed,
+    accuracyFindings,
+  };
+
+  const visibilityScore = clamp(
+    Math.round(
+      shareOfShelf * 0.45 +
+        (averageRank ? Math.max(0, 10 - averageRank) * 4 : 0) +
+        sourceInfluence.officialSourceShare * 0.15 +
+        accuracyMetrics.evidenceCoverageRate * 0.2 +
+        siteAudit.score * 0.2,
+    ),
+    0,
+    100,
+  );
+
+  const outputWithVisibility = {
+    ...preliminaryOutput,
+    visibilityScore,
+  };
+
+  const ethicsSummary = buildEthicsSummary(accuracyMetrics, sourceInfluence);
+  const recommendations = buildRecommendations(input, {
+    ...outputWithVisibility,
+    ethicsSummary,
+  });
   const briefCoverage = buildBriefCoverage({
     queriesAnalyzed: results.length,
     assistantsMonitored: ASSISTANTS,
@@ -1335,27 +1382,24 @@ export async function runOpenAIAnalysis(input: NewAnalysisInput): Promise<Analys
     accuracyMetrics,
     ethicsSummary,
     siteAudit,
-    recommendations: [],
+    recommendations,
   });
 
-  const rankScore = averageRank ? clamp(Math.round((11 - averageRank) * 10), 0, 100) : 20;
-  const visibilityScore = clamp(
-    Math.round(
-      shareOfShelf * 0.45 +
-        rankScore * 0.2 +
-        sourceInfluence.officialSourceShare * 0.15 +
-        accuracyMetrics.accuracyRate * 0.2,
-    ),
-    0,
-    100,
-  );
+  const executiveSummary = buildExecutiveSummary({
+    shareOfShelf,
+    averageRank,
+    sourceInfluence,
+    accuracyMetrics,
+    ethicsSummary,
+    briefCoverage,
+  });
 
-  const outputBase: AnalysisOutput = {
+  return {
     analysisProvider: "openai",
     monitoringMode: "assistant-search-monitor",
     assistantsMonitored: ASSISTANTS,
     queriesAnalyzed: results.length,
-    executiveSummary: "",
+    executiveSummary,
     shareOfShelf,
     averageRank,
     visibilityScore,
@@ -1366,36 +1410,8 @@ export async function runOpenAIAnalysis(input: NewAnalysisInput): Promise<Analys
     assistantCoverage,
     siteAudit,
     results,
-    recommendations: [],
+    recommendations,
     sourcesReviewed,
     accuracyFindings,
   };
-
-  const recommendations = buildRecommendations(input, outputBase);
-  const finalBriefCoverage = buildBriefCoverage({
-    queriesAnalyzed: results.length,
-    assistantsMonitored: ASSISTANTS,
-    shareOfShelf,
-    sourceInfluence,
-    accuracyMetrics,
-    ethicsSummary,
-    siteAudit,
-    recommendations,
-  });
-
-  const completedOutput: AnalysisOutput = {
-    ...outputBase,
-    briefCoverage: finalBriefCoverage,
-    executiveSummary: buildExecutiveSummary({
-      shareOfShelf,
-      averageRank,
-      sourceInfluence,
-      accuracyMetrics,
-      ethicsSummary,
-      briefCoverage: finalBriefCoverage,
-    }),
-    recommendations,
-  };
-
-  return completedOutput;
 }

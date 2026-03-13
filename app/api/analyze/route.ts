@@ -9,11 +9,15 @@ import {
 
 export const runtime = "nodejs";
 
+const httpsUrl = z.string().url().refine((value) => value.startsWith("https://"), {
+  message: "Use an HTTPS URL.",
+});
+
 const analysisSchema = z.object({
   productName: z.string().min(2),
   companyName: z.string().min(2),
-  companyWebsite: z.string().url(),
-  productPageUrl: z.string().url().optional(),
+  companyWebsite: httpsUrl,
+  productPageUrl: httpsUrl.optional(),
   targetAudience: z.string().min(2),
   location: z.string().min(2),
   productCategory: z.string().min(2),

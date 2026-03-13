@@ -1,0 +1,13 @@
+run_id,assistant,theme,query,mentioned,product_position,estimated_rank,source_trust,citations_count,observed_description
+apple_airpods_austin_2026_03_13,ChatGPT,simple,"simplest wireless earbuds for commuters and Apple ecosystem users",TRUE,top_3,1,strong,6,"AirPods Pro are described as premium wireless earbuds with active noise cancellation, transparency mode, and strong Apple ecosystem integration."
+apple_airpods_austin_2026_03_13,Gemini,local,"Apple AirPods Pro near Austin, TX",FALSE,not_visible,,weak,0,"No grounded local product availability answer was retained for this query."
+apple_airpods_austin_2026_03_13,Alexa,audience_fit,"best wireless earbuds for commuters and Apple ecosystem users in Austin, TX",TRUE,mentioned,3,mixed,3,"AirPods Pro are positioned as a strong iPhone-friendly option for commuting and daily use."
+apple_airpods_austin_2026_03_13,Gemini,budget,"cheapest wireless earbuds in Austin, TX",FALSE,not_visible,,weak,0,"No grounded evidence showed AirPods Pro ranking in cheap or budget-oriented answers."
+cerave_cream_nyc_2026_03_13,ChatGPT,local,"CeraVe Moisturizing Cream near New York, NY",TRUE,top_3,1,strong,6,"CeraVe Moisturizing Cream is described as a dermatologist-developed moisturizer for dry and sensitive skin."
+cerave_cream_nyc_2026_03_13,Gemini,trusted,"most trusted moisturizing cream brands in New York, NY",TRUE,mentioned,2,strong,4,"CeraVe is framed as a trusted skincare brand with ceramides and dry-skin credibility."
+cerave_cream_nyc_2026_03_13,Alexa,budget,"cheapest moisturizing cream in New York, NY",FALSE,not_visible,,weak,0,"No grounded evidence showed this product leading cheap-price answers."
+cerave_cream_nyc_2026_03_13,Gemini,simple,"simplest moisturizing cream for people with dry and sensitive skin",TRUE,top_3,1,strong,5,"The product is described as fragrance-free, easy to understand, and suitable for sensitive skin."
+nike_alarm_clock_austin_2026_03_13,ChatGPT,best_of,"best 3 alarm clocks for busy commuters in Austin, TX",FALSE,not_visible,,strong,8,"No grounded shopping recommendation linked Nike to alarm clocks. Results instead referenced Philips, Sony, and iHome."
+nike_alarm_clock_austin_2026_03_13,Gemini,local,"Nike Alarm Clock near Austin, TX",FALSE,not_visible,,strong,8,"No official Nike alarm clock page or retailer listing was found."
+nike_alarm_clock_austin_2026_03_13,Alexa,comparison,"Nike Alarm Clock vs Philips in Austin, TX",FALSE,not_visible,,strong,7,"Grounded sources discussed alarm clock makers such as Philips, but not a Nike clock product."
+nike_alarm_clock_austin_2026_03_13,ChatGPT,budget,"cheapest alarm clocks in Austin, TX",FALSE,not_visible,,strong,8,"The cheapest grounded answers focused on mainstream clock brands rather than Nike."

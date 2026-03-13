@@ -17,8 +17,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen grid place-items-center text-slate-600">
-        <div className="rounded-xl border border-slate-200 bg-white px-6 py-4 shadow-sm">Loading your workspace...</div>
+      <div className="grid min-h-screen place-items-center px-4 text-slate-600">
+        <div className="page-hero max-w-md px-8 py-8 text-center">
+          <p className="eyebrow justify-center">Cubix.AI</p>
+          <h1 className="mt-3 text-2xl font-bold text-slate-950">Loading your workspace</h1>
+          <p className="mt-3 text-sm leading-6 text-slate-600">Preparing your dashboard, saved runs, and monitoring controls.</p>
+        </div>
       </div>
     );
   }

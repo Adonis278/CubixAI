@@ -84,43 +84,43 @@ export function ResultsView({ analysis }: { analysis: AnalysisRecord }) {
   return (
     <div className="space-y-6">
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-8">
-        <Card className="border-orange-100 p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">AI Share of Shelf</p>
-          <p className="mt-2 text-3xl font-bold text-orange-600">{analysis.shareOfShelf}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Visibility Score</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.visibilityScore}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Average Rank</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.averageRank ?? "-"}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Queries Monitored</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.queriesAnalyzed}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Official Source Share</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.sourceInfluence.officialSourceShare}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Accuracy Rate</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.accuracyMetrics.accuracyRate}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Evidence Coverage</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.accuracyMetrics.evidenceCoverageRate}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Brief Coverage</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{analysis.briefCoverage.score}%</p>
-        </Card>
+        <div className="metric-card">
+          <p className="metric-label">AI Share of Shelf</p>
+          <p className="metric-value text-orange-600">{analysis.shareOfShelf}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Visibility Score</p>
+          <p className="metric-value">{analysis.visibilityScore}</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Average Rank</p>
+          <p className="metric-value">{analysis.averageRank ?? "-"}</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Queries Monitored</p>
+          <p className="metric-value">{analysis.queriesAnalyzed}</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Official Source Share</p>
+          <p className="metric-value">{analysis.sourceInfluence.officialSourceShare}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Accuracy Rate</p>
+          <p className="metric-value">{analysis.accuracyMetrics.accuracyRate}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Evidence Coverage</p>
+          <p className="metric-value">{analysis.accuracyMetrics.evidenceCoverageRate}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Brief Coverage</p>
+          <p className="metric-value">{analysis.briefCoverage.score}%</p>
+        </div>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="overflow-hidden border-orange-100">
-          <div className="border-b border-orange-100 bg-[linear-gradient(135deg,_#fff4e8_0%,_#ffffff_72%)] px-5 py-5">
+        <Card className="overflow-hidden">
+          <div className="border-b border-orange-100/70 bg-[linear-gradient(135deg,_rgba(255,244,232,0.96)_0%,_rgba(255,255,255,0.82)_72%)] px-5 py-5">
             <div className="flex flex-wrap items-center gap-2">
               <Badge tone="neutral">OpenAI research engine</Badge>
               <Badge tone="neutral">{analysis.monitoringMode}</Badge>
@@ -129,15 +129,15 @@ export function ResultsView({ analysis }: { analysis: AnalysisRecord }) {
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{analysis.executiveSummary}</p>
           </div>
           <div className="grid gap-4 px-5 py-5 md:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Assistants Monitored</p>
               <p className="mt-2 text-lg font-bold text-slate-900">{analysis.assistantsMonitored.join(", ")}</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Secure Source Rate</p>
               <p className="mt-2 text-lg font-bold text-slate-900">{analysis.sourceInfluence.secureHttpsRate}% HTTPS</p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Human Review Queue</p>
               <p className="mt-2 text-lg font-bold text-slate-900">{analysis.ethicsSummary.flaggedClaimCount} flagged claims</p>
             </div>
@@ -151,23 +151,23 @@ export function ResultsView({ analysis }: { analysis: AnalysisRecord }) {
           </div>
           <p className="mt-2 text-sm text-slate-600">{analysis.ethicsSummary.note}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Hallucination Risk</p>
               <p className="mt-2 text-lg font-bold text-slate-900">{analysis.ethicsSummary.hallucinationRisk}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Claim Validation</p>
               <p className="mt-2 text-lg font-bold text-slate-900">
                 {analysis.accuracyMetrics.claimValidationRate}% ({analysis.accuracyMetrics.verifiedClaims}/{analysis.accuracyMetrics.totalClaims || 0})
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Queries With Evidence</p>
               <p className="mt-2 text-lg font-bold text-slate-900">
                 {analysis.accuracyMetrics.groundedQueries}/{analysis.queriesAnalyzed}
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="metric-card p-4">
               <p className="text-xs uppercase tracking-wide text-slate-500">Queries Without Evidence</p>
               <p className="mt-2 text-lg font-bold text-slate-900">{analysis.accuracyMetrics.zeroEvidenceQueries}</p>
             </div>

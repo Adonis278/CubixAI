@@ -68,14 +68,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[28px] border border-orange-100 bg-[linear-gradient(130deg,_#fff1e5_0%,_#ffffff_52%,_#fff7ef_100%)] p-6 md:p-8">
+      <section className="section-panel overflow-hidden p-6 md:p-8">
         <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-orange-500">AI Commerce Monitoring</p>
-            <h1 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-slate-900">
-              Track where your product appears in assistant shopping answers and why.
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            <p className="eyebrow">Portfolio Snapshot</p>
+            <h1 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-slate-950">Latest signals across your monitored products.</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
               Monitor assistant-style shopping queries, store secure source evidence, flag hallucinations against your product truth, and turn the results into actionable visibility recommendations. Direct Gemini, Claude, and Alexa connectors are still planned, not live.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -88,53 +86,53 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <Card className="border-white/70 bg-white/90 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Latest Product</p>
-              <p className="mt-2 text-lg font-bold text-slate-900">{latest?.productName ?? "No runs yet"}</p>
-              <p className="mt-1 text-sm text-slate-500">{latest ? `${latest.companyName} / ${latest.location}` : "Start a monitoring run"}</p>
-            </Card>
-            <Card className="border-white/70 bg-white/90 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Latest Share of Shelf</p>
-              <p className="mt-2 text-3xl font-bold text-orange-600">{latest?.shareOfShelf ?? 0}%</p>
-              <p className="mt-1 text-sm text-slate-500">Across assistant shopping queries</p>
-            </Card>
-            <Card className="border-white/70 bg-white/90 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Latest Accuracy Confidence</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{latest?.accuracyMetrics.accuracyRate ?? 0}%</p>
-              <p className="mt-1 text-sm text-slate-500">
+            <div className="metric-card">
+              <p className="metric-label">Latest Product</p>
+              <p className="metric-value text-[1.55rem]">{latest?.productName ?? "No runs yet"}</p>
+              <p className="metric-note">{latest ? `${latest.companyName} / ${latest.location}` : "Start a monitoring run"}</p>
+            </div>
+            <div className="metric-card">
+              <p className="metric-label">Latest Share of Shelf</p>
+              <p className="metric-value text-orange-600">{latest?.shareOfShelf ?? 0}%</p>
+              <p className="metric-note">Across assistant shopping queries</p>
+            </div>
+            <div className="metric-card">
+              <p className="metric-label">Latest Accuracy Confidence</p>
+              <p className="metric-value">{latest?.accuracyMetrics.accuracyRate ?? 0}%</p>
+              <p className="metric-note">
                 Evidence {latest?.accuracyMetrics.evidenceCoverageRate ?? 0}% / Fact-check {latest?.accuracyMetrics.factCheckCoverageRate ?? 0}%
               </p>
-            </Card>
-            <Card className="border-white/70 bg-white/90 p-4">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Latest Brief Coverage</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{latest?.briefCoverage.score ?? 0}%</p>
-              <p className="mt-1 text-sm text-slate-500">{latest?.ethicsSummary.note ?? "No runs yet."}</p>
-            </Card>
+            </div>
+            <div className="metric-card">
+              <p className="metric-label">Latest Brief Coverage</p>
+              <p className="metric-value">{latest?.briefCoverage.score ?? 0}%</p>
+              <p className="metric-note">{latest?.ethicsSummary.note ?? "No runs yet."}</p>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Monitoring Runs</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{quickStats.total}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Avg Share of Shelf</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{quickStats.avgShareOfShelf}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Avg Accuracy Rate</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{quickStats.avgAccuracy}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Avg Brief Coverage</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{quickStats.avgBriefCoverage}%</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Flagged Claims</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">{quickStats.flaggedClaims}</p>
-        </Card>
+        <div className="metric-card">
+          <p className="metric-label">Monitoring Runs</p>
+          <p className="metric-value">{quickStats.total}</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Avg Share of Shelf</p>
+          <p className="metric-value">{quickStats.avgShareOfShelf}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Avg Accuracy Rate</p>
+          <p className="metric-value">{quickStats.avgAccuracy}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Avg Brief Coverage</p>
+          <p className="metric-value">{quickStats.avgBriefCoverage}%</p>
+        </div>
+        <div className="metric-card">
+          <p className="metric-label">Flagged Claims</p>
+          <p className="metric-value">{quickStats.flaggedClaims}</p>
+        </div>
       </section>
 
       <Card className="p-5">

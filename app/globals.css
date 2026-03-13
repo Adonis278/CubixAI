@@ -1,11 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --surface: #ffffff;
-  --brand: #f97316;
-  --brand-deep: #ea580c;
+  --background: #f4efe8;
+  --background-strong: #fff9f2;
+  --foreground: #152032;
+  --foreground-muted: #56637a;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: #ffffff;
+  --surface-dark: #142033;
+  --brand: #ef7d32;
+  --brand-deep: #d96416;
+  --brand-soft: #fff1e1;
+  --brand-glow: rgba(239, 125, 50, 0.18);
+  --line: rgba(148, 163, 184, 0.28);
+  --line-strong: rgba(148, 163, 184, 0.4);
+  --shadow-lg: 0 28px 70px rgba(15, 23, 42, 0.12);
+  --shadow-md: 0 18px 45px rgba(15, 23, 42, 0.08);
   --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
 }
@@ -18,9 +28,41 @@
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(circle at top left, rgba(255, 228, 203, 0.9) 0%, rgba(255, 244, 232, 0.48) 28%, transparent 52%),
+    radial-gradient(circle at top right, rgba(255, 212, 176, 0.54) 0%, transparent 34%),
+    linear-gradient(180deg, #fffaf5 0%, #f5efe8 56%, #eff3f8 100%);
   color: var(--foreground);
   font-family: var(--font-body);
+}
+
+body::before,
+body::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: auto;
+  z-index: -1;
+  border-radius: 999px;
+  filter: blur(60px);
+}
+
+body::before {
+  top: 6rem;
+  right: -6rem;
+  width: 18rem;
+  height: 18rem;
+  background: rgba(239, 125, 50, 0.12);
+}
+
+body::after {
+  bottom: -7rem;
+  left: -3rem;
+  width: 16rem;
+  height: 16rem;
+  background: rgba(28, 45, 86, 0.08);
 }
 
 h1,
@@ -30,4 +72,122 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+::selection {
+  background: rgba(239, 125, 50, 0.18);
+}
+
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: 2rem;
+  background:
+    linear-gradient(135deg, rgba(255, 245, 233, 0.96) 0%, rgba(255, 255, 255, 0.84) 42%, rgba(255, 245, 236, 0.88) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -8% -38% auto;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(239, 125, 50, 0.2) 0%, rgba(239, 125, 50, 0) 70%);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand-deep);
+}
+
+.page-title {
+  font-size: clamp(2rem, 3vw, 3.35rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.page-copy {
+  max-width: 44rem;
+  color: var(--foreground-muted);
+  line-height: 1.75;
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 1.15rem;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.metric-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -1rem -1.75rem auto;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(239, 125, 50, 0.16) 0%, rgba(239, 125, 50, 0) 74%);
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #697586;
+}
+
+.metric-value {
+  position: relative;
+  margin-top: 0.7rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--foreground);
+}
+
+.metric-note {
+  position: relative;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--foreground-muted);
+}
+
+.section-panel {
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: var(--shadow-md);
 }

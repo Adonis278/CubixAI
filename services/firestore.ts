@@ -162,3 +162,8 @@ export async function getAnalysisById(analysisId: string) {
     ...normalizeAnalysisRecord(snapshot.data() as Omit<AnalysisRecord, "id">),
   };
 }
+
+export async function getAnalysesByIds(analysisIds: string[]) {
+  const records = await Promise.all(analysisIds.map((analysisId) => getAnalysisById(analysisId)));
+  return records.flatMap((record) => (record ? [record] : []));
+}
