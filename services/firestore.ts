@@ -21,6 +21,97 @@ function getDbOrThrow() {
   return db;
 }
 
+function normalizeAnalysisRecord(data: Omit<AnalysisRecord, "id"> & Partial<AnalysisRecord>): Omit<AnalysisRecord, "id"> {
+  return {
+    ...data,
+    analysisProvider: data.analysisProvider ?? "openai",
+    monitoringMode: data.monitoringMode ?? "assistant-search-monitor",
+    assistantsMonitored: data.assistantsMonitored ?? [],
+    queriesAnalyzed: data.queriesAnalyzed ?? 0,
+    executiveSummary: data.executiveSummary ?? "",
+    shareOfShelf: data.shareOfShelf ?? 0,
+    averageRank: data.averageRank ?? null,
+    visibilityScore: data.visibilityScore ?? 0,
+    sourceInfluence: data.sourceInfluence ?? {
+      officialSourceShare: 0,
+      competitorSourceShare: 0,
+      secureHttpsRate: 0,
+      sourceTypeBreakdown: {
+        official: 0,
+        competitor: 0,
+        marketplace: 0,
+        review: 0,
+        editorial: 0,
+        directory: 0,
+        unknown: 0,
+      },
+      dominantDomains: [],
+    },
+    accuracyMetrics: data.accuracyMetrics ?? {
+      totalClaims: 0,
+      verifiedClaims: 0,
+      flaggedClaims: 0,
+      groundedQueries: 0,
+      zeroEvidenceQueries: 0,
+      queriesWithClaims: 0,
+      evidenceCoverageRate: 0,
+      factCheckCoverageRate: 0,
+      claimValidationRate: 0,
+      accuracyRate: 0,
+      humanReviewRequired: false,
+    },
+    ethicsSummary: data.ethicsSummary ?? {
+      status: "review",
+      hallucinationRisk: "medium",
+      flaggedClaimCount: 0,
+      note: "",
+    },
+    briefCoverage: data.briefCoverage ?? {
+      score: 0,
+      items: [],
+    },
+    assistantCoverage: data.assistantCoverage ?? [],
+    sourcesReviewed: data.sourcesReviewed ?? [],
+    accuracyFindings: data.accuracyFindings ?? [],
+    siteAudit: data.siteAudit ?? {
+      auditedUrl: data.productPageUrl ?? data.companyWebsite ?? "",
+      score: 0,
+      checks: [],
+      issues: [],
+      suggestions: [],
+    },
+    recommendations: data.recommendations ?? [],
+    results: (data.results ?? []).map((result) => ({
+      ...result,
+      assistant: result.assistant ?? "ChatGPT",
+      theme: result.theme ?? "best_of",
+      query: result.query ?? "",
+      assistantSummary: result.assistantSummary ?? "",
+      observedDescription: result.observedDescription ?? "",
+      productPosition: result.productPosition ?? "not_visible",
+      sourceTrust: result.sourceTrust ?? "weak",
+      claims: result.claims ?? [],
+      citations: result.citations ?? [],
+    })),
+  };
+}
+
+function stripUndefinedDeep<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripUndefinedDeep(item)) as T;
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, entry]) => entry !== undefined)
+        .map(([key, entry]) => [key, stripUndefinedDeep(entry)]),
+    ) as T;
+  }
+
+  return value;
+}
+
 export async function upsertUserProfile(user: { uid: string; email: string | null; displayName: string | null }) {
   const db = getDbOrThrow();
   const ref = doc(db, "users", user.uid);
@@ -37,10 +128,13 @@ export async function upsertUserProfile(user: { uid: string; email: string | nul
 
 export async function createAnalysisRecord(record: Omit<AnalysisRecord, "id">) {
   const db = getDbOrThrow();
-  const ref = await addDoc(collection(db, "analyses"), {
-    ...record,
-    createdAt: record.createdAt,
-  });
+  const ref = await addDoc(
+    collection(db, "analyses"),
+    stripUndefinedDeep({
+      ...record,
+      createdAt: record.createdAt,
+    }),
+  );
 
   return ref.id;
 }
@@ -52,7 +146,7 @@ export async function getAnalysisHistory(userId: string) {
 
   return snapshot.docs.map((item) => ({
     id: item.id,
-    ...(item.data() as Omit<AnalysisRecord, "id">),
+    ...normalizeAnalysisRecord(item.data() as Omit<AnalysisRecord, "id">),
   }));
 }
 
@@ -65,6 +159,6 @@ export async function getAnalysisById(analysisId: string) {
 
   return {
     id: snapshot.id,
-    ...(snapshot.data() as Omit<AnalysisRecord, "id">),
+    ...normalizeAnalysisRecord(snapshot.data() as Omit<AnalysisRecord, "id">),
   };
 }

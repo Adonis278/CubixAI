@@ -80,9 +80,11 @@ export default function AnalysisDetailsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-orange-500">Results</p>
-        <h1 className="text-2xl font-bold text-slate-900">{analysis.companyName} Visibility Report</h1>
-        <p className="text-sm text-slate-600">Category: {analysis.category}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-orange-500">Monitoring Results</p>
+        <h1 className="text-2xl font-bold text-slate-900">{analysis.productName} AI Commerce Report</h1>
+        <p className="text-sm text-slate-600">
+          {analysis.companyName} / {analysis.productCategory} / {analysis.location}
+        </p>
       </div>
       <ResultsView analysis={analysis} />
     </div>
