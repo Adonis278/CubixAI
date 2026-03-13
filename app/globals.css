@@ -6,19 +6,21 @@
   --surface: #ffffff;
   --brand: #f97316;
   --brand-deep: #ea580c;
+  --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-manrope);
-  --font-heading: var(--font-sora);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-manrope), sans-serif;
+  font-family: var(--font-body);
 }
 
 h1,
@@ -27,5 +29,5 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-sora), sans-serif;
+  font-family: var(--font-display);
 }

@@ -6,6 +6,7 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input, TextArea } from "@/components/ui/input";
+import { getErrorMessage } from "@/lib/utils";
 import { requestAnalysis } from "@/services/analysis-api";
 import { createAnalysisRecord } from "@/services/firestore";
 import { AnalysisGoal, NewAnalysisInput } from "@/types/analysis";
@@ -43,10 +44,16 @@ export function NewAnalysisForm() {
       return;
     }
 
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(websiteUrl.trim());
+    } catch {
+      setError("Please enter a valid URL.");
+      return;
+    }
+
     try {
       setLoading(true);
-      const parsedUrl = new URL(websiteUrl.trim());
-
       const payload: NewAnalysisInput = {
         companyName: companyName.trim(),
         websiteUrl: parsedUrl.toString(),
@@ -73,8 +80,8 @@ export function NewAnalysisForm() {
       });
 
       router.push(`/analysis/${analysisId}`);
-    } catch {
-      setError("Please enter a valid URL and try again.");
+    } catch (error) {
+      setError(getErrorMessage(error, "Unable to run the analysis right now."));
     } finally {
       setLoading(false);
     }

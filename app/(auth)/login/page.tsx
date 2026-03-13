@@ -1,15 +1,70 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { FormEvent, Suspense, useEffect, useState } from "react";
+import { FirebaseError } from "firebase/app";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { getErrorMessage } from "@/lib/utils";
 
-export default function LoginPage() {
+function sanitizeNextPath(path: string | null) {
+  if (!path || !path.startsWith("/") || path.startsWith("//")) {
+    return "/dashboard";
+  }
+
+  return path;
+}
+
+function getAuthErrorMessage(error: unknown) {
+  if (error instanceof FirebaseError) {
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        return "That email already has an account. Sign in instead.";
+      case "auth/invalid-email":
+        return "Enter a valid email address.";
+      case "auth/invalid-credential":
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+        return "Incorrect email or password.";
+      case "auth/weak-password":
+        return "Password must be at least 6 characters.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait a moment and try again.";
+      case "auth/network-request-failed":
+        return "Network error while contacting Firebase. Try again.";
+      case "auth/operation-not-allowed":
+        return "Email/password sign-in is disabled in Firebase Authentication.";
+      default:
+        return error.message || "Authentication failed. Check your credentials and try again.";
+    }
+  }
+
+  const message = getErrorMessage(error, "Authentication failed. Check your credentials and try again.");
+  if (message === "Firebase config missing") {
+    return "Firebase is not configured. Add the NEXT_PUBLIC_FIREBASE_* values.";
+  }
+
+  return message;
+}
+
+function LoginCardSkeleton() {
+  return (
+    <div className="grid min-h-screen place-items-center bg-[linear-gradient(140deg,_#fff7ed_0%,_#ffffff_35%,_#f8fafc_100%)] p-4">
+      <Card className="w-full max-w-md p-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">Cubix.AI</p>
+        <h1 className="mt-2 text-2xl font-bold text-slate-900">Welcome back</h1>
+        <p className="mt-1 text-sm text-slate-600">Loading sign-in...</p>
+      </Card>
+    </div>
+  );
+}
+
+function LoginPageContent() {
   const { user, signIn, signUp, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
@@ -17,7 +72,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const nextPath = "/dashboard";
+  const nextPath = sanitizeNextPath(searchParams.get("next"));
 
   useEffect(() => {
     if (!loading && user) {
@@ -31,14 +86,16 @@ export default function LoginPage() {
 
     try {
       setBusy(true);
+      const normalizedEmail = email.trim();
+
       if (mode === "signin") {
-        await signIn(email, password);
+        await signIn(normalizedEmail, password);
       } else {
-        await signUp(email, password);
+        await signUp(normalizedEmail, password);
       }
       router.replace(nextPath);
-    } catch {
-      setError("Authentication failed. Check your credentials and try again.");
+    } catch (error) {
+      setError(getAuthErrorMessage(error));
     } finally {
       setBusy(false);
     }
@@ -78,5 +135,13 @@ export default function LoginPage() {
         </button>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginCardSkeleton />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

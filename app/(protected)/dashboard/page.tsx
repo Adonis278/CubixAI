@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/utils";
 import { getAnalysisHistory } from "@/services/firestore";
 import { AnalysisRecord } from "@/types/analysis";
 
@@ -12,17 +13,33 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [history, setHistory] = useState<AnalysisRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      if (!user) return;
-      setLoading(true);
-      const rows = await getAnalysisHistory(user.uid);
-      if (!cancelled) {
-        setHistory(rows);
+      if (!user) {
         setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
+      try {
+        const rows = await getAnalysisHistory(user.uid);
+        if (!cancelled) {
+          setHistory(rows);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setError(getErrorMessage(error, "Unable to load your analyses right now."));
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
@@ -87,6 +104,8 @@ export default function DashboardPage() {
 
         {loading ? (
           <p className="p-4 text-sm text-slate-600">Loading dashboard data...</p>
+        ) : error ? (
+          <p className="p-4 text-sm text-rose-600">{error}</p>
         ) : history.length === 0 ? (
           <div className="p-6">
             <p className="text-sm text-slate-600">No analyses yet. Start your first visibility run.</p>

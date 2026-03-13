@@ -33,6 +33,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(Boolean(auth));
 
+  const syncUserProfile = useCallback(async (currentUser: User | null) => {
+    if (!currentUser) {
+      return;
+    }
+
+    await upsertUserProfile({
+      uid: currentUser.uid,
+      email: currentUser.email,
+      displayName: currentUser.displayName,
+    });
+  }, []);
+
   useEffect(() => {
     if (!auth) {
       return;
@@ -40,35 +52,48 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      if (currentUser) {
-        await upsertUserProfile({
-          uid: currentUser.uid,
-          email: currentUser.email,
-          displayName: currentUser.displayName,
-        });
+
+      try {
+        await syncUserProfile(currentUser);
+      } catch (error) {
+        console.error("Failed to sync the signed-in user profile.", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [auth]);
+  }, [auth, syncUserProfile]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const auth = getFirebaseAuth();
     if (!auth) throw new Error("Firebase config missing");
-    await signInWithEmailAndPassword(auth, email, password);
-  }, []);
+
+    setLoading(true);
+
+    try {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(credential.user);
+      await syncUserProfile(credential.user);
+    } finally {
+      setLoading(false);
+    }
+  }, [syncUserProfile]);
 
   const signUp = useCallback(async (email: string, password: string) => {
     const auth = getFirebaseAuth();
     if (!auth) throw new Error("Firebase config missing");
-    const credential = await createUserWithEmailAndPassword(auth, email, password);
-    await upsertUserProfile({
-      uid: credential.user.uid,
-      email: credential.user.email,
-      displayName: credential.user.displayName,
-    });
-  }, []);
+
+    setLoading(true);
+
+    try {
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
+      setUser(credential.user);
+      await syncUserProfile(credential.user);
+    } finally {
+      setLoading(false);
+    }
+  }, [syncUserProfile]);
 
   const signOutUser = useCallback(async () => {
     const auth = getFirebaseAuth();

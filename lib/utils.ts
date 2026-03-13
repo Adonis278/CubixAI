@@ -4,6 +4,14 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);
 }
 
+export function getErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+
+  return fallback;
+}
+
 export function safeHostname(url: string) {
   try {
     return new URL(url).hostname;
