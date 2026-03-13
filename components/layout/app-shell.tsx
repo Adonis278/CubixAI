@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, BarChart3, History, LogOut, ShieldCheck, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-provider";
-import { CubixLogo } from "@/components/ui/cubix-logo";
+import cubixLogo from "@/cubixai_logo.png";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
@@ -15,40 +15,27 @@ const navItems = [
   { href: "/history", label: "History", icon: History },
 ];
 
-const sectionMeta: Record<string, { title: string; copy: string }> = {
-  "/dashboard": {
-    title: "Commerce Visibility Command Center",
-    copy: "Monitor assistant visibility, source quality, and factual trust from one workspace.",
-  },
-  "/analysis/new": {
-    title: "Launch A Monitoring Run",
-    copy: "Capture product-level visibility and source evidence across assistant-style shopping prompts.",
-  },
-  "/history": {
-    title: "Saved Monitoring Runs",
-    copy: "Review historical reports, trust signals, and the progress of each product over time.",
-  },
-};
-
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user, signOutUser } = useAuth();
-  const currentSection = navItems.find((item) => pathname.startsWith(item.href));
-  const section = currentSection ? sectionMeta[currentSection.href] : null;
 
   return (
     <div className="min-h-screen">
       <div className="mx-auto grid max-w-[1480px] grid-cols-1 gap-6 px-4 py-5 xl:grid-cols-[292px_minmax(0,1fr)] xl:px-6">
         <aside className="glass-panel flex flex-col rounded-[30px] border border-white/60 p-4 shadow-[var(--shadow-lg)]">
-          <div className="overflow-hidden rounded-[26px] border border-orange-200/60 bg-[linear-gradient(145deg,_rgba(255,244,230,0.96)_0%,_rgba(255,255,255,0.88)_52%,_rgba(255,234,216,0.96)_100%)] p-5">
-            <CubixLogo />
+          <div className="overflow-hidden rounded-[26px] border border-orange-200/60 bg-[linear-gradient(145deg,_rgba(255,244,230,0.96)_0%,_rgba(255,255,255,0.88)_52%,_rgba(255,234,216,0.96)_100%)] p-5 text-center">
+            <Image src={cubixLogo} alt="CubixAI" className="mx-auto h-auto w-full max-w-[180px]" priority />
+            <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">Mission & Vision</p>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Measure assistant share of shelf, source trust, and factual accuracy in one place.
+              Help small businesses, especially minority-owned, earn fair visibility and accurate representation in AI-driven discovery.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Badge tone="neutral">OpenAI grounded</Badge>
-              <Badge tone="neutral">Firestore history</Badge>
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              <Badge tone="neutral">Fair AI discovery</Badge>
+              <Badge tone="neutral">Visibility intelligence</Badge>
             </div>
+            <p className="mt-4 text-sm leading-6 text-slate-500">
+              CubixAI is building a more transparent and equitable AI search ecosystem.
+            </p>
           </div>
 
           <nav className="mt-5 space-y-2">
@@ -87,7 +74,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-200">Trust Layer</p>
-                <p className="mt-2 text-sm font-semibold text-white">Human-review mode active</p>
+                <p className="mt-2 text-sm font-semibold text-white">Authentic Product Reviews</p>
               </div>
               <ShieldCheck className="h-5 w-5 text-orange-300" />
             </div>
@@ -108,22 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        <main className="space-y-6">
-          <section className="page-hero px-6 py-6 md:px-8 md:py-7">
-            <div className="relative z-10 flex flex-wrap items-start justify-between gap-6">
-              <div className="max-w-3xl">
-                <p className="eyebrow">{currentSection?.label ?? "Workspace"}</p>
-                <h2 className="page-title mt-3 text-slate-950">{section?.title ?? "Cubix.AI Workspace"}</h2>
-                <p className="page-copy mt-3 text-sm md:text-base">{section?.copy ?? "Review your latest product monitoring signals and take action."}</p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <Link href="/analysis/new">
-                  <Button>Run Fresh Analysis</Button>
-                </Link>
-              </div>
-            </div>
-          </section>
-
+        <main>
           <section>{children}</section>
         </main>
       </div>

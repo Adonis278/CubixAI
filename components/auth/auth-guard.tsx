@@ -19,7 +19,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return (
       <div className="grid min-h-screen place-items-center px-4 text-slate-600">
         <div className="page-hero max-w-md px-8 py-8 text-center">
-          <p className="eyebrow justify-center">Cubix.AI</p>
+          <p className="eyebrow justify-center">CubixAI</p>
           <h1 className="mt-3 text-2xl font-bold text-slate-950">Loading your workspace</h1>
           <p className="mt-3 text-sm leading-6 text-slate-600">Preparing your dashboard, saved runs, and monitoring controls.</p>
         </div>

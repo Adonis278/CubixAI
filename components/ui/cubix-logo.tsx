@@ -35,7 +35,7 @@ export function CubixLogo({
       </span>
       {showWordmark ? (
         <span className="min-w-0">
-          <span className="block text-lg font-black tracking-[-0.05em] text-slate-950">Cubix.AI</span>
+          <span className="block text-lg font-black tracking-[-0.05em] text-slate-950">CubixAI</span>
           <span className="block text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">AI Commerce Monitor</span>
         </span>
       ) : null}
