@@ -1,8 +1,8 @@
-# Cubix.AI MVP Build Prompt
+# CubixAi MVP Build Prompt
 
 You are a senior full-stack engineer and product designer. Build a production-style MVP for a web app called:
 
-**Cubix.AI**
+**CubixAi**
 
 ## Goal
 

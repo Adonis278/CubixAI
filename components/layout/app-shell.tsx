@@ -21,7 +21,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-[240px_1fr]">
         <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-100">
           <div className="mb-6 border-b border-slate-200 pb-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">Cubix.AI</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">CubixAi</p>
             <h1 className="mt-1 text-lg font-bold text-slate-900">AI Commerce Monitor</h1>
           </div>
 

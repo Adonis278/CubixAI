@@ -53,7 +53,7 @@ function LoginCardSkeleton() {
   return (
     <div className="grid min-h-screen place-items-center bg-[linear-gradient(140deg,_#fff7ed_0%,_#ffffff_35%,_#f8fafc_100%)] p-4">
       <Card className="w-full max-w-md p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">Cubix.AI</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">CubixAi</p>
         <h1 className="mt-2 text-2xl font-bold text-slate-900">Welcome back</h1>
         <p className="mt-1 text-sm text-slate-600">Loading sign-in...</p>
       </Card>
@@ -104,7 +104,7 @@ function LoginPageContent() {
   return (
     <div className="grid min-h-screen place-items-center bg-[linear-gradient(140deg,_#fff7ed_0%,_#ffffff_35%,_#f8fafc_100%)] p-4">
       <Card className="w-full max-w-md p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">Cubix.AI</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">CubixAi</p>
         <h1 className="mt-2 text-2xl font-bold text-slate-900">Welcome back</h1>
         <p className="mt-1 text-sm text-slate-600">Sign in to access your AI visibility analytics dashboard.</p>
 
