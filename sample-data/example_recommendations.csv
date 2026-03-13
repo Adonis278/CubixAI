@@ -1,0 +1,12 @@
+run_id,priority,theme,recommendation
+apple_airpods_austin_2026_03_13,high,visibility,"Create Austin-aware comparison and local landing content so AirPods Pro appears in more shopping-style AI answers."
+apple_airpods_austin_2026_03_13,high,evidence,"Expand official product and retailer coverage because many queries returned weak or missing grounded evidence."
+apple_airpods_austin_2026_03_13,medium,accuracy,"Add richer authoritative facts such as pricing, variants, and availability so more queries can be fact-checked."
+apple_airpods_austin_2026_03_13,medium,messaging,"Reflect commuter and Apple ecosystem language more directly in product copy."
+cerave_cream_nyc_2026_03_13,high,optimization,"Keep retailer and official product data synchronized so the product continues to rank strongly in local and trusted-skin queries."
+cerave_cream_nyc_2026_03_13,medium,trust,"Tie accuracy and trust improvements to conversion and customer satisfaction metrics."
+cerave_cream_nyc_2026_03_13,medium,messaging,"Reinforce dry-skin and sensitive-skin audience language in FAQs and product descriptions."
+nike_alarm_clock_austin_2026_03_13,high,validity,"Do not treat this product as market-ready until a real official product page and authoritative facts exist."
+nike_alarm_clock_austin_2026_03_13,high,source_control,"Launch official product, schema, and merchant-feed coverage before expecting visibility in AI shopping answers."
+nike_alarm_clock_austin_2026_03_13,medium,content,"Publish FAQ and how-to content that explains features, pricing, and availability for the product."
+nike_alarm_clock_austin_2026_03_13,medium,review_workflow,"Treat low-evidence queries as a human-review backlog rather than as complete analytics."

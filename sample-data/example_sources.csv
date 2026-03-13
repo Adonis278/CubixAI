@@ -1,0 +1,10 @@
+run_id,domain,source_type,trust_level,is_official,is_competitor_source,secure,url,title
+apple_airpods_austin_2026_03_13,www.apple.com,official,high,TRUE,FALSE,TRUE,https://www.apple.com/airpods-pro/,"AirPods Pro - Apple"
+apple_airpods_austin_2026_03_13,support.apple.com,official,high,TRUE,FALSE,TRUE,https://support.apple.com/airpods,"AirPods Support - Apple"
+apple_airpods_austin_2026_03_13,www.bestbuy.com,marketplace,medium,FALSE,FALSE,TRUE,https://www.bestbuy.com/site/searchpage.jsp?st=airpods+pro,"Best Buy search results for AirPods Pro"
+cerave_cream_nyc_2026_03_13,www.cerave.com,official,high,TRUE,FALSE,TRUE,https://www.cerave.com/skincare/moisturizers/moisturizing-cream,"CeraVe Moisturizing Cream"
+cerave_cream_nyc_2026_03_13,www.target.com,marketplace,medium,FALSE,FALSE,TRUE,https://www.target.com/s?searchTerm=cerave+moisturizing+cream,"Target search results for CeraVe Moisturizing Cream"
+cerave_cream_nyc_2026_03_13,www.walmart.com,marketplace,medium,FALSE,FALSE,TRUE,https://www.walmart.com/search?q=cerave+moisturizing+cream,"Walmart search results for CeraVe Moisturizing Cream"
+nike_alarm_clock_austin_2026_03_13,www.nike.com,official,high,TRUE,FALSE,TRUE,https://www.nike.com/,"Nike"
+nike_alarm_clock_austin_2026_03_13,www.documents.philips.com,competitor,medium,FALSE,TRUE,TRUE,https://www.documents.philips.com/assets/2023/01/19/alarm_clock_manual.pdf,"Philips alarm clock manual"
+nike_alarm_clock_austin_2026_03_13,www.tomsguide.com,review,medium,FALSE,FALSE,TRUE,https://www.tomsguide.com/best-picks/best-alarm-clocks,"Tom's Guide best alarm clocks"

@@ -52,11 +52,28 @@ export default function HistoryPage() {
   }, [user]);
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Monitoring History</h1>
-        <p className="text-sm text-slate-600">Review saved product visibility runs, source quality, and ethics status over time.</p>
-      </div>
+    <div className="space-y-6">
+      <section className="section-panel p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">Run Archive</p>
+            <h1 className="mt-3 text-3xl font-bold text-slate-950">Every saved visibility report in one place.</h1>
+            <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600">
+              Compare product runs, reopen source evidence, and track ethics status over time without losing the operational context of each analysis.
+            </p>
+          </div>
+          <div className="grid min-w-[220px] gap-3 sm:grid-cols-2">
+            <div className="metric-card p-4">
+              <p className="metric-label">Saved Reports</p>
+              <p className="metric-value">{data.length}</p>
+            </div>
+            <div className="metric-card p-4">
+              <p className="metric-label">Latest Status</p>
+              <p className="metric-value text-[1.45rem] capitalize">{data[0]?.ethicsSummary.status ?? "none"}</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Card className="overflow-hidden">
         {loading ? (
@@ -72,20 +89,20 @@ export default function HistoryPage() {
           </div>
         ) : (
           <table className="w-full min-w-[960px] border-collapse text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+            <thead className="bg-[linear-gradient(180deg,_rgba(255,246,236,0.92)_0%,_rgba(255,255,255,0.78)_100%)] text-left text-xs uppercase tracking-[0.18em] text-slate-500">
               <tr>
                 <th className="px-4 py-3">Product</th>
                 <th className="px-4 py-3">Location</th>
                 <th className="px-4 py-3">Share of Shelf</th>
                 <th className="px-4 py-3">Accuracy</th>
                 <th className="px-4 py-3">Ethics</th>
-                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Date & Time</th>
                 <th className="px-4 py-3">Action</th>
               </tr>
             </thead>
             <tbody>
               {data.map((item) => (
-                <tr key={item.id} className="border-t border-slate-100">
+                <tr key={item.id} className="border-t border-slate-100/80 bg-white/50 transition hover:bg-orange-50/45">
                   <td className="px-4 py-3">
                     <p className="font-semibold text-slate-900">{item.productName}</p>
                     <p className="text-xs text-slate-500">{item.companyName}</p>
@@ -98,7 +115,7 @@ export default function HistoryPage() {
                       {item.ethicsSummary.status}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{format(new Date(item.createdAt), "MMM d, yyyy")}</td>
+                  <td className="px-4 py-3 text-slate-600">{format(new Date(item.createdAt), "MMM d, yyyy h:mm a")}</td>
                   <td className="px-4 py-3">
                     <Link href={`/analysis/${item.id}`}>
                       <Button variant="secondary">Open Results</Button>

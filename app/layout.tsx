@@ -3,7 +3,7 @@ import { AuthProvider } from "@/components/auth/auth-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CubixAi",
+  title: "CubixAI",
   description: "SEO + analytics for AI-assisted shopping visibility.",
 };
 

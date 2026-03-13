@@ -30,6 +30,7 @@ It helps brands understand:
 - Auth: Firebase Authentication (email/password)
 - Database: Firestore
 - Hosting: Firebase Hosting (framework integration)
+- LLM: ChatGPT 4 mini
 
 ## Project Structure
 
@@ -162,13 +163,18 @@ npm run firebase:deploy
 - siteAudit
 - results
 - recommendations
+- productCatalogId
+- productCatalogItemCount
 - createdAt
 
-## Notes on the MVP Analysis Engine
+### productCatalogs/{catalogId}
 
-- Uses deterministic seeded logic for reliable demos
-- Generates category-aware shopping prompts
-- Simulates brand mentions, rank estimates, and competitor presence
+- userId
+- analysisId
+- companyName
+- category
+- sourceFileName
+- itemCounk estimates, and competitor presence
 - Runs lightweight website signal inspection using server-side fetch
 - Structured so real LLM/search integrations can replace the mock logic later
 
