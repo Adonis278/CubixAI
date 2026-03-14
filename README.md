@@ -1,60 +1,38 @@
-# CubixAi MVP
+# CubixAI
 
-CubixAi is a production-style MVP for "SEO + analytics for AI-assisted shopping".
+CubixAI is a production-style MVP for AI visibility intelligence in shopping journeys. It helps brands understand where they appear in assistant-style answers, why they appear (or do not), and what to improve.
 
-It helps brands understand:
+## Live Deployment
 
-- Whether they appear in AI-assisted shopping responses
-- Which competitors appear instead
-- Why their visibility is strong or weak
-- What website/content improvements can increase visibility and conversions
+- Hosting URL: https://cubixaius.web.app
+- Firebase project: `cubixaius`
+- Deploy status: successful
 
-## Features
+## What The App Does
 
-- Firebase email/password authentication
-- Protected dashboard routes for authenticated users only
-- New analysis workflow (company, website, category, competitors, optional goal)
-- Deterministic mock analysis pipeline (10-12 category-aware prompts)
-- Query-by-query visibility results with mention/rank explanations
-- Lightweight website audit (title, meta description, FAQ, schema, relevance, trust)
-- Recommendation engine (3-7 actionable suggestions)
-- Firestore persistence per authenticated user
-- Dashboard summary cards and recent analyses list
-- Analysis history page with drill-in to results
-- Firebase Hosting and Firestore deployment config
+- Runs product/brand visibility analysis against assistant-style shopping prompts
+- Scores visibility, source quality, and trust signals
+- Surfaces query-level results with competitor context
+- Generates website audit findings and recommendations
+- Stores per-user history in Firestore
 
-## Stack
+## Core Features
 
-- Frontend: Next.js 16 (App Router), TypeScript, Tailwind CSS v4
-- Backend: Next.js API route (`/api/analyze`) + Firebase services
-- Auth: Firebase Authentication (email/password)
+- Firebase email/password auth
+- Protected dashboard routes
+- New analysis workflow
+- Results view with actionable recommendations
+- History of saved analyses
+- Firestore rules and indexes for user-scoped data
+
+## Tech Stack
+
+- Frontend: Next.js 16 (App Router), React, TypeScript, Tailwind CSS v4
+- Backend: Next.js API routes
 - Database: Firestore
+- Auth: Firebase Authentication
+- AI: OpenAI API (configured by env vars)
 - Hosting: Firebase Hosting (framework integration)
-- LLM: ChatGPT 4 mini
-
-## Project Structure
-
-```text
-app/
-	(auth)/login/
-	(protected)/dashboard/
-	(protected)/analysis/new/
-	(protected)/analysis/[id]/
-	(protected)/history/
-	api/analyze/
-components/
-	analysis/
-	auth/
-	layout/
-	ui/
-firebase/
-lib/
-services/
-types/
-firestore.rules
-firestore.indexes.json
-firebase.json
-```
 
 ## Local Setup
 
@@ -64,13 +42,13 @@ firebase.json
 npm install
 ```
 
-2. Copy environment template and configure Firebase values:
+2. Create local env file:
 
 ```bash
 copy env.example .env.local
 ```
 
-3. Update `.env.local`:
+3. Configure `.env.local`:
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=
@@ -79,110 +57,71 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5-mini
+OPENAI_REASONING_EFFORT=low
 ```
 
-4. Run the app:
+4. Run locally:
 
 ```bash
 npm run dev
 ```
 
-5. Open `http://localhost:3000`
+5. Open:
 
-## Firebase Setup
-
-1. Create a Firebase project.
-2. Enable Authentication > Email/Password.
-3. Create a Firestore database.
-4. Replace `.firebaserc` project id:
-
-```json
-{
-	"projects": {
-		"default": "your-real-project-id"
-	}
-}
+```text
+http://localhost:3000
 ```
 
-5. Deploy Firestore rules/indexes:
+## Project Navigation
+
+- `/login`: sign in/sign up
+- `/dashboard`: overview of latest metrics and activity
+- `/analysis/new`: start a new analysis
+- `/analysis/[id]`: view a specific report
+- `/history`: review saved analyses
+
+## Quality Checks
 
 ```bash
-npx firebase-tools deploy --only firestore
-```
-
-## Run Quality Checks
-
-```bash
-npm run lint
 npm run typecheck
+npm run lint
 npm run build
 ```
 
-## Deploy to Firebase Hosting
+## Deploy To Firebase
 
-1. Install Firebase CLI if needed:
-
-```bash
-npm i -g firebase-tools
-```
-
-2. Login:
+Use direct deploy command with explicit project:
 
 ```bash
-firebase login
+firebase deploy --project cubixaius
 ```
 
-3. Deploy:
+Or use npm script (if `.firebaserc` default project is configured):
 
 ```bash
 npm run firebase:deploy
 ```
 
-## Firestore Data Model
+## Firestore Data Model (High Level)
 
-### users/{userId}
+### `users/{userId}`
 
 - name
 - email
 - createdAt
 
-### analyses/{analysisId}
+### `analyses/{analysisId}`
 
 - userId
-- companyName
-- websiteUrl
-- category
-- competitors
-- businessDescription
-- goal
-- promptsAnalyzed
-- visibilityScore
-- mentionRate
-- averageRank
-- fairnessInsight
-- siteAudit
-- results
+- company/product input fields
+- prompts/results/metrics
 - recommendations
-- productCatalogId
-- productCatalogItemCount
 - createdAt
 
-### productCatalogs/{catalogId}
+## Notes
 
-- userId
-- analysisId
-- companyName
-- category
-- sourceFileName
-- itemCounk estimates, and competitor presence
-- Runs lightweight website signal inspection using server-side fetch
-- Structured so real LLM/search integrations can replace the mock logic later
-
-## Future Improvements
-
-- Replace mock analyzer with live AI shopping search integrations
-- Add team workspaces and organization-level permissions
-- Add trend charts across time windows
-- Add scheduled analysis runs and alerts
-- Add exportable reporting (PDF/CSV)
-- Add event tracking for conversion diagnostics
+- This app currently uses Firebase Hosting + a server runtime path for dynamic routes.
+- If Firebase prompts for additional APIs during first deploy, enable them in the target project.
+- For consistent local compatibility, Node 20 is recommended.
